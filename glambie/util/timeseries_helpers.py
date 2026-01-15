@@ -516,6 +516,10 @@ def derivative_to_cumulative(
             start_dates.insert(idx + 2, start_dates[idx + 1])
             end_dates.insert(idx + 2, end_dates[idx + 1])
             changes.insert(idx + 3, changes[idx + 1])  # already in cumulative, hence +3
+    if len(start_dates) == 0:
+        if return_type == "arrays":
+            return np.array([]), np.array([])
+        return pd.DataFrame({"dates": [], "changes": []}) if not calculate_as_errors else pd.DataFrame({"dates": [], "errors": []})
     dates = [start_dates[0], *end_dates]
 
     if return_type == "arrays":

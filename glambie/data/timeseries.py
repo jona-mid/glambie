@@ -811,19 +811,27 @@ class Timeseries:
         # 2) Case where resolution is >= a year: we upsample and take the average from the longterm trend
         else:  # make sure that the trends don't start in the middle of the year
             if not self.timeseries_is_annual_grid(year_type=year_type):
-                raise AssertionError(
-                    "Timeseries needs to fit into annual grid before \
-                                     up-sampling to annual changes."
-                )
+                # raise AssertionError(
+                #     "Timeseries needs to fit into annual grid before \
+                #                      up-sampling to annual changes."
+                #)
+
+                object_copy = object_copy.shift_timeseries_to_annual_grid_proportionally(year_type=year_type)
+
+                if not object_copy.timeseries_is_annual_grid(year_type=year_type):
+                    raise AssertionError(
+                        "Timeseries needs to fit into annual grid before \
+                                         up-sampling to annual changes."
+                    )
             new_start_dates, new_end_dates = get_years(
                 year_start,
-                min_date=self.data.start_dates.min(),
-                max_date=self.data.end_dates.max(),
+                min_date=object_copy.data.start_dates.min(),
+                max_date=object_copy.data.end_dates.max(),
                 return_type="arrays",
             )
             new_changes = []
             new_uncertainties = []
-            for _, row in self.data.as_dataframe().iterrows():
+            for _, row in object_copy.data.as_dataframe().iterrows():
                 time_period = row["end_dates"] - row["start_dates"]
                 annual_trend = row["changes"] / time_period
                 annual_unc = row["errors"] / time_period

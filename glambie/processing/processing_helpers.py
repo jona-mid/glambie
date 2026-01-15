@@ -77,7 +77,7 @@ def filter_catalogue_with_config_settings(
         "Excluding the following datasets from ANNUAL calculations: datasets=%s",
         exclude_annual_datasets,
     )
-    for ds in exclude_annual_datasets:
+    for ds in exclude_annual_datasets or []:
         if ds is not None:
             datasets_annual = [
                 d for d in datasets_annual if d.user_group.lower() != ds.lower()
@@ -96,7 +96,7 @@ def filter_catalogue_with_config_settings(
         "Excluding the following datasets from TREND calculations: datasets=%s",
         exclude_trend_datasets,
     )
-    for ds in exclude_trend_datasets:
+    for ds in exclude_trend_datasets or []:
         if ds is not None:
             datasets_trend = [
                 d for d in datasets_trend if d.user_group.lower() != ds.lower()

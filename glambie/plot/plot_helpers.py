@@ -93,6 +93,10 @@ def apply_vertical_adjustment_for_cumulative_plot(
     pd.DataFrame
         vertical adjusted cumulative timeseries
     """
+    # Return unchanged if either DataFrame is empty (no adjustment possible)
+    if len(timeseries_to_adjust) == 0 or len(reference_timeseries) == 0:
+        return timeseries_to_adjust
+
     adjustment = None
     # get adjustment date onto monthly grid
     adjustment_date = timeseries_as_months([timeseries_to_adjust.dates.iloc[0]])[0]
